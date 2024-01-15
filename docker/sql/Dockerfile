@@ -1,1 +1,1 @@
-FROM postgres:alpine
+FROM mysql:latest

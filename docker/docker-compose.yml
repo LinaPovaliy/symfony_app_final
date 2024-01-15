@@ -18,18 +18,18 @@ services:
         ports:
             - ${NGINX_HOST_HTTP_PORT}:8080
 
-    postgres:
-        container_name: postgres
-        build:
-            context: ./sql
+    mysql:
+        container_name: mysql
+        image: mysql:latest
         ports:
-            - ${POSTGRES_PORT}:5432
+            - ${MYSQL_PORT}:3306
         environment:
-            POSTGRES_DB: ${POSTGRES_DB}
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DB}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
         volumes:
-            - db_data:/var/lib/postgresql/data:rw
+            - db_data:/var/lib/mysql:rw
 
 volumes:
     db_data:
