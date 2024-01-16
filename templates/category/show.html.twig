@@ -3,30 +3,32 @@
 {% block title %}AdExpress - {{ category }}{% endblock %}
 
 {% block body %}
-    <h2>{{ category.name }}</h2>
+    <div style="text-align: center; margin-top: 50px;">
+        <h2>{{ category.name }}</h2>
 
-    {% if advertisements|length > 0 %}
-        <div>There are {{ advertisements|length }} advertisements.</div>
+        {% if advertisements|length > 0 %}
+            <div>There are {{ advertisements|length }} advertisements.</div>
 
-        {% for advertisement in advertisements %}
+            {% for advertisement in advertisements %}
 
-            <h4>{{ advertisement.name }}</h4>
-            <small>
-                {{ advertisement.createdAt|date('Y-m-d') }}
-            </small>
-        {% endfor %}
+                <h4>{{ advertisement.name }}</h4>
+                <small>
+                    {{ advertisement.createdAt|date('Y-m-d') }}
+                </small>
+            {% endfor %}
 
-        {% if previous >= 0 %}
-            <a href="{{ path('category', { slug: category.slug, offset: previous }) }}">Previous</a>
+            {% if previous >= 0 %}
+                <a href="{{ path('category', { slug: category.slug, offset: previous }) }}">Previous</a>
+            {% endif %}
+            {% if next < advertisements|length %}
+                <a href="{{ path('category', { slug: category.slug, offset: next }) }}">Next</a>
+            {% endif %}
+        {% else %}
+            <div>No advertisements have been published yet for this category.</div>
         {% endif %}
-        {% if next < advertisements|length %}
-            <a href="{{ path('category', { slug: category.slug, offset: next }) }}">Next</a>
-        {% endif %}
-    {% else %}
-        <div>No advertisements have been published yet for this category.</div>
-    {% endif %}
 
-    <h2>Add your add</h2>
+        <h2>Add your advertisement!</h2>
 
-    {{ form(comment_form) }}
+        {{ form(comment_form) }}
+    </div>
 {% endblock %}
