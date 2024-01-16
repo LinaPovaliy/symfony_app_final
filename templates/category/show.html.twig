@@ -3,7 +3,7 @@
 {% block title %}AdExpress - {{ category }}{% endblock %}
 
 {% block body %}
-    <h2>{{ category }} Category</h2>
+    <h2>{{ category.name }}</h2>
 
     {% if advertisements|length > 0 %}
         <div>There are {{ advertisements|length }} advertisements.</div>

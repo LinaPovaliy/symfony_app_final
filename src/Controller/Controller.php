@@ -7,6 +7,7 @@ use App\Entity\Category;
 use App\Form\CommentType;
 use App\Repository\AdvertisementRepository;
 use App\Repository\CategoryRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class Controller extends AbstractController
 {
+
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+    ) {
+    }
+
     #[Route('/', name: 'homepage')]
     public function index(CategoryRepository $categoryRepository): Response
     {
@@ -27,6 +34,16 @@ class Controller extends AbstractController
     {
         $advertisement = new Advertisement();
         $form = $this->createForm(CommentType::class, $advertisement);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $advertisement->setCategory($category);
+
+            $this->entityManager->persist($advertisement);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('category', ['slug' => $category->getSlug()]);
+        }
+
 
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $advertisementRepository->getAdvertisementPaginator($category, $offset);
