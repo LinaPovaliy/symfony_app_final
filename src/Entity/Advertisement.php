@@ -7,6 +7,7 @@ use App\Repository\AdvertisementRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AdvertisementRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Advertisement
 {
     #[ORM\Id]
@@ -29,6 +30,12 @@ class Advertisement
     #[ORM\ManyToOne(inversedBy: 'advertisements')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function __construct()
     {

@@ -15,7 +15,7 @@
             <h1><a href="{{ path('homepage') }}">AdExpress</a></h1>
             <ul>
                 {% for category in categories %}
-                <li><a href="{{ path('category', { id: category.id }) }}">{{ category.name }}</a></li>
+                <li><a href="{{ path('category', { slug: category.slug }) }}">{{ category.name }}</a></li>
                 {% endfor %}
             </ul>
             <hr />
