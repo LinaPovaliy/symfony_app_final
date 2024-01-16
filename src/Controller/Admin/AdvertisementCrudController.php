@@ -45,7 +45,6 @@ class AdvertisementCrudController extends AbstractCrudController
         yield TextField::new('name');
         yield TextField::new('status')
             ->hideOnIndex()
-            ->setFormTypeOptions(['choices' => array_flip(AdvertisementStatus::getStatuses())]);
         ;
 
          $createdAt = DateTimeField::new('createdAt')->setFormTypeOptions([

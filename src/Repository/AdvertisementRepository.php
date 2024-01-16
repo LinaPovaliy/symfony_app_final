@@ -29,7 +29,9 @@ class AdvertisementRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('a')
             ->andWhere('a.category = :category')
+            ->andWhere('a.status = :status')
             ->setParameter('category', $category)
+            ->setParameter('status', 'published')
             ->orderBy('a.createdAt', 'DESC')
             ->setMaxResults(self::PAGINATOR_PER_PAGE)
             ->setFirstResult($offset)

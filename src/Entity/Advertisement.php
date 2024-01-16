@@ -20,8 +20,8 @@ class Advertisement
     #[Assert\NotBlank]
     private ?string $name = null;
 
-    #[ORM\Column(length: 40)]
-    private ?string $status = AdvertisementStatus::DRAFT;
+    #[ORM\Column(length: 40, options: ['default' => 'published'])]
+    private ?string $status = 'published';
 
     #[ORM\Column(length: 255)]
     private ?string $hash = null;
@@ -43,11 +43,6 @@ class Advertisement
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->generateHash();
-    }
-
-    public function __toString(): string
-    {
-        return $this->name.' '.$this->slug;
     }
 
     public function generateHash(): void
