@@ -21,12 +21,13 @@ class Controller extends AbstractController
     }
 
     #[Route('/category/{id}', name: 'category')]
-    public function show(Request $request, Category $category, AdvertisementRepository $advertisementRepository): Response
+    public function show(Request $request, Category $category, AdvertisementRepository $advertisementRepository, CategoryRepository $categoryRepository): Response
     {
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $advertisementRepository->getAdvertisementPaginator($category, $offset);
 
         return $this->render('category/index.html.twig', [
+            'categories' => $categoryRepository->findAll(),
             'category' => $category,
             'advertisements' => $paginator,
             'previous' => $offset - AdvertisementRepository::PAGINATOR_PER_PAGE,
