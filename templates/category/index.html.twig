@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AdExpress{% endblock %}
+
+{% block body %}
+    <h2>Give your ad!</h2>
+
+    {% for category in category %}
+        <h4>{{ category.name }}</h4>
+        <p>
+            <a href="{{ path('category', { id: category.id }) }}">{{ category.name }}</a>
+        </p>
+    {% endfor %}
+{% endblock %}

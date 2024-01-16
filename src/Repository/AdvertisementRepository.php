@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Advertisement;
+use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @extends ServiceEntityRepository<Advertisement>
@@ -16,10 +18,28 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AdvertisementRepository extends ServiceEntityRepository
 {
+    public const PAGINATOR_PER_PAGE = 2;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Advertisement::class);
     }
+
+    public function getAdvertisementPaginator(Category $category, int $offset): Paginator
+    {
+        $query = $this->createQueryBuilder('a')
+            ->andWhere('a.category = :category')
+            ->setParameter('category', $category)
+            ->orderBy('a.createdAt', 'DESC')
+            ->setMaxResults(self::PAGINATOR_PER_PAGE)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ;
+
+        return new Paginator($query);
+    }
+
+
 
 //    /**
 //     * @return Advertisement[] Returns an array of Advertisement objects

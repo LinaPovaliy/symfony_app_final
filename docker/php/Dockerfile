@@ -18,6 +18,10 @@ RUN apk update && \
     apk add --no-cache mariadb-client && \
     docker-php-ext-install pdo_mysql
 
+# intl
+RUN apk add --no-cache icu-dev
+RUN docker-php-ext-install intl
+
 # Configure non-root user.
 ARG PUID=1000
 ARG PGID=1000

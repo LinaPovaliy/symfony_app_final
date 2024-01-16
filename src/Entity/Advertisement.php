@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\AdvertisementStatus;
 use App\Repository\AdvertisementRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,7 +18,7 @@ class Advertisement
     private ?string $name = null;
 
     #[ORM\Column(length: 40)]
-    private ?string $status = null;
+    private ?string $status = AdvertisementStatus::DRAFT;
 
     #[ORM\Column(length: 255)]
     private ?string $hash = null;
@@ -28,6 +29,25 @@ class Advertisement
     #[ORM\ManyToOne(inversedBy: 'advertisements')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->generateHash();
+    }
+
+    public function __toString(): string
+    {
+        return $this->name.' '.$this->slug;
+    }
+
+    public function generateHash(): void
+    {
+        $name = $this->name;
+        if ($name !== null) {
+            $this->hash = hash('sha256', $name);
+        }
+    }
 
     public function getId(): ?int
     {
@@ -42,6 +62,7 @@ class Advertisement
     public function setName(string $name): static
     {
         $this->name = $name;
+        $this->generateHash();
 
         return $this;
     }
@@ -51,7 +72,7 @@ class Advertisement
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 

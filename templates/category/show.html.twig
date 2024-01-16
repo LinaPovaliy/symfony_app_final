@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AdExpress - {{ category }}{% endblock %}
+
+{% block body %}
+    <h2>{{ category }} Category</h2>
+
+    {% if adverisements|length > 0 %}
+        <div>There are {{ adverisements|length }} adverisements.</div>
+
+        {% for adverisement in adverisements %}
+
+            <h4>{{ adverisement.name }}</h4>
+            <small>
+                {{ adverisement.createdAt|format_datetime('medium', 'short') }}
+            </small>
+        {% endfor %}
+
+        {% if previous >= 0 %}
+            <a href="{{ path('category', { id: category.id, offset: previous }) }}">Previous</a>
+        {% endif %}
+        {% if next < adverisements|length %}
+            <a href="{{ path('category', { id: category.id, offset: next }) }}">Next</a>
+        {% endif %}
+    {% else %}
+        <div>No advertisements have been published yet for this category.</div>
+    {% endif %}
+{% endblock %}
