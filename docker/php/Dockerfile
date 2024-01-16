@@ -5,7 +5,7 @@ RUN apk add --no-cache curl git build-base zlib-dev oniguruma-dev autoconf bash
 RUN apk add --update linux-headers
 
 # Xdebug
-ARG INSTALL_XDEBUG=false
+ARG INSTALL_XDEBUG=true
 RUN if [ ${INSTALL_XDEBUG} = true ]; \
     then \
       pecl install xdebug && docker-php-ext-enable xdebug; \
@@ -13,8 +13,10 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; \
 
 COPY ./docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
-# Postgres
-RUN apk add --no-cache libpq-dev && docker-php-ext-install pdo_pgsql
+# MySQL
+RUN apk update && \
+    apk add --no-cache mariadb-client && \
+    docker-php-ext-install pdo_mysql
 
 # Configure non-root user.
 ARG PUID=1000
