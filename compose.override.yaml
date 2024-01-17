@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+###> symfony/mailer ###
+  mailer:
+    image: sj26/mailcatcher
+    ports: ["1025", "1080"]
+###< symfony/mailer ###
