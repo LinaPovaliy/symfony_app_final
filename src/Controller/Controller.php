@@ -5,12 +5,14 @@ namespace App\Controller;
 use App\Entity\Advertisement;
 use App\Entity\Category;
 use App\Form\CommentType;
+use App\Message\AdvertisementMessage;
 use App\Repository\AdvertisementRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class Controller extends AbstractController
@@ -18,6 +20,7 @@ class Controller extends AbstractController
 
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private MessageBusInterface $bus,
     ) {
     }
 
@@ -40,6 +43,7 @@ class Controller extends AbstractController
 
             $this->entityManager->persist($advertisement);
             $this->entityManager->flush();
+            $this->bus->dispatch(new AdvertisementMessage($advertisement->getId()));
 
             return $this->redirectToRoute('category', ['slug' => $category->getSlug()]);
         }
